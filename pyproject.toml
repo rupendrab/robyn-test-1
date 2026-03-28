@@ -4,9 +4,15 @@ version = "0.1.0"
 description = "Quick Robyn test app"
 requires-python = ">=3.12"
 dependencies = [
+    "fastapi>=0.135.2",
+    "python-multipart>=0.0.22",
     "robyn~=0.82.0",
+    "uvicorn>=0.42.0",
 ]
 
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["app", "fastapi_app"]
