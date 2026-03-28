@@ -1,0 +1,237 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "My API",
+    "version": "1.0.0",
+    "description": "A simple API built with Robyn",
+    "termsOfService": null,
+    "contact": {
+      "name": null,
+      "url": null,
+      "email": null
+    },
+    "license": {
+      "name": null,
+      "url": null
+    },
+    "servers": [],
+    "externalDocs": {
+      "description": null,
+      "url": null
+    },
+    "components": {
+      "schemas": {},
+      "responses": {},
+      "parameters": {},
+      "examples": {},
+      "requestBodies": {},
+      "securitySchemes": {},
+      "links": {},
+      "callbacks": {},
+      "pathItems": {}
+    }
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Get Root",
+        "description": "No description provided",
+        "parameters": [],
+        "tags": [
+          "General"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/plain": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Get Health Status",
+        "description": "No description provided",
+        "parameters": [],
+        "tags": [
+          "General"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/plain": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/async-health": {
+      "get": {
+        "summary": "Get Async Health Status",
+        "description": "No description provided",
+        "parameters": [],
+        "tags": [
+          "General"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/plain": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/async-private-health": {
+      "get": {
+        "summary": "Get Async Private Health Status",
+        "description": "No description provided",
+        "parameters": [],
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response object",
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "mode": {
+                      "title": "Mode",
+                      "type": "string"
+                    },
+                    "user": {
+                      "title": "User",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/authorize": {
+      "post": {
+        "summary": "Authorize User",
+        "description": "No description provided",
+        "parameters": [],
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "title": "Username",
+                    "type": "string"
+                  },
+                  "password": {
+                    "title": "Password",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response object",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private": {
+      "get": {
+        "summary": "Get Private Route",
+        "description": "No description provided",
+        "parameters": [],
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response object",
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "title": "Message",
+                      "type": "string"
+                    },
+                    "user": {
+                      "title": "User",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "responses": {},
+    "parameters": {},
+    "examples": {},
+    "requestBodies": {},
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "links": {},
+    "callbacks": {},
+    "pathItems": {}
+  },
+  "servers": [],
+  "externalDocs": null
+}
