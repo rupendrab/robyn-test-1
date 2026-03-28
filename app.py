@@ -4,6 +4,7 @@ import hashlib
 import hmac
 import json
 import time
+from urllib.parse import parse_qs
 from pathlib import Path
 from typing import TypedDict
 
@@ -111,6 +112,23 @@ def verify_token(token: str) -> str | None:
     return username
 
 
+def authorize_user(username: str, password: str) -> AuthResponse | Response:
+    if USERS.get(username) != password:
+        return Response(
+            status_code=HTTP_401_UNAUTHORIZED,
+            headers={"Content-Type": "application/json"},
+            description='{"error":"Invalid username or password"}',
+        )
+
+    token = generate_token(username)
+
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "expires_in": TOKEN_TTL_SECONDS,
+    }
+
+
 class DictionaryBearerAuthHandler(AuthenticationHandler):
     def authenticate(self, request: Request) -> Identity | None:
         token = self.token_getter.get_token(request)
@@ -160,23 +178,16 @@ async def async_private_health(request: Request) -> AsyncPrivateResponse:
 
 @app.post("/authorize", openapi_name="Authorize User", openapi_tags=["Auth"])
 def authorize(body: AuthRequest) -> AuthResponse | Response:
-    username = body["username"]
-    password = body["password"]
+    return authorize_user(body["username"], body["password"])
 
-    if USERS.get(username) != password:
-        return Response(
-            status_code=HTTP_401_UNAUTHORIZED,
-            headers={"Content-Type": "application/json"},
-            description='{"error":"Invalid username or password"}',
-        )
 
-    token = generate_token(username)
-
-    return {
-        "access_token": token,
-        "token_type": "bearer",
-        "expires_in": TOKEN_TTL_SECONDS,
-    }
+@app.post("/authorize-form", openapi_name="Authorize User With Form", openapi_tags=["Auth"])
+def authorize_form(request: Request) -> AuthResponse | Response:
+    raw_body = request.body.decode("utf-8") if isinstance(request.body, bytes) else str(request.body)
+    parsed_form = parse_qs(raw_body)
+    username = parsed_form.get("username", [""])[0]
+    password = parsed_form.get("password", [""])[0]
+    return authorize_user(username, password)
 
 
 @app.get("/private", auth_required=True, openapi_name="Get Private Route", openapi_tags=["Auth"])
@@ -204,6 +215,29 @@ def configure_openapi_security():
     async_private_get = spec.get("paths", {}).get("/async-private-health", {}).get("get")
     if async_private_get is not None:
         async_private_get["security"] = [{"BearerAuth": []}]
+
+    authorize_form_post = spec.get("paths", {}).get("/authorize-form", {}).get("post")
+    if authorize_form_post is not None:
+        authorize_form_post["requestBody"] = {
+            "required": True,
+            "content": {
+                "application/x-www-form-urlencoded": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "username": {
+                                "type": "string",
+                            },
+                            "password": {
+                                "type": "string",
+                                "format": "password",
+                            },
+                        },
+                        "required": ["username", "password"],
+                    }
+                }
+            },
+        }
 
 
 def generate_openapi_spec():
