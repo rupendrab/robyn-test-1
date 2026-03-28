@@ -72,6 +72,46 @@
         }
       }
     },
+    "/docs": {
+      "get": {
+        "summary": "Get API Docs",
+        "description": "No description provided",
+        "parameters": [],
+        "tags": [
+          "General"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/plain": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/openapi.json": {
+      "get": {
+        "summary": "Get OpenAPI Spec",
+        "description": "No description provided",
+        "parameters": [],
+        "tags": [
+          "General"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/plain": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/async-health": {
       "get": {
         "summary": "Get Async Health Status",

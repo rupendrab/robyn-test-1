@@ -9,8 +9,10 @@ from pathlib import Path
 from typing import TypedDict
 
 from robyn import OpenAPI, Robyn
+from robyn.argument_parser import Config
 from robyn.authentication import AuthenticationHandler, BearerGetter
 from robyn.openapi import OpenAPIInfo
+from robyn.responses import serve_html
 from robyn.robyn import Identity, Request, Response
 from robyn.status_codes import HTTP_401_UNAUTHORIZED
 
@@ -23,11 +25,14 @@ USERS = {
 TOKEN_SECRET = "change-me-in-production"
 TOKEN_TTL_SECONDS = 3600
 OPENAPI_SPEC_PATH = Path(__file__).with_name("openapi.json")
+DOCS_HTML_PATH = Path(__file__).with_name("docs.html")
 OPENAPI_INFO = OpenAPIInfo(
     title="My API",
     version="1.0.0",
     description="A simple API built with Robyn",
 )
+APP_CONFIG = Config()
+APP_CONFIG.disable_openapi = True
 
 
 class AuthRequest(TypedDict):
@@ -144,6 +149,7 @@ class DictionaryBearerAuthHandler(AuthenticationHandler):
 
 app = Robyn(
     __file__,
+    config=APP_CONFIG,
     openapi=OpenAPI(info=OPENAPI_INFO),
 )
 
@@ -158,6 +164,16 @@ def home():
 @app.get("/health", openapi_name="Get Health Status", openapi_tags=["General"])
 def health():
     return {"status": "ok"}
+
+
+@app.get("/docs", const=True, openapi_name="Get API Docs", openapi_tags=["General"])
+def docs():
+    return serve_html(str(DOCS_HTML_PATH))
+
+
+@app.get("/openapi.json", const=True, openapi_name="Get OpenAPI Spec", openapi_tags=["General"])
+def openapi_spec():
+    return app.openapi.get_openapi_config()
 
 
 @app.get("/async-health", openapi_name="Get Async Health Status", openapi_tags=["General"])
