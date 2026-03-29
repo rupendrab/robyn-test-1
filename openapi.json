@@ -124,26 +124,6 @@
           "200": {
             "description": "Successful Response",
             "content": {
-              "text/plain": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      }
-    },
-    "/async-private-health": {
-      "get": {
-        "summary": "Get Async Private Health Status",
-        "description": "No description provided",
-        "parameters": [],
-        "tags": [
-          "Auth"
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
               "application/json": {
                 "schema": {
                   "title": "Response object",
@@ -156,22 +136,13 @@
                     "mode": {
                       "title": "Mode",
                       "type": "string"
-                    },
-                    "user": {
-                      "title": "User",
-                      "type": "string"
                     }
                   }
                 }
               }
             }
           }
-        },
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ]
+        }
       }
     },
     "/authorize": {
@@ -188,8 +159,8 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "username": {
-                    "title": "Username",
+                  "user_email": {
+                    "title": "User_email",
                     "type": "string"
                   },
                   "password": {
@@ -244,7 +215,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "username": {
+                  "user_email": {
                     "type": "string"
                   },
                   "password": {
@@ -253,7 +224,7 @@
                   }
                 },
                 "required": [
-                  "username",
+                  "user_email",
                   "password"
                 ]
               }
@@ -288,6 +259,383 @@
                       "type": "string"
                     }
                   }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/async-private-health": {
+      "get": {
+        "summary": "Get Async Private Health Status",
+        "description": "No description provided",
+        "parameters": [],
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response object",
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "mode": {
+                      "title": "Mode",
+                      "type": "string"
+                    },
+                    "user": {
+                      "title": "User",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/change-my-password": {
+      "put": {
+        "summary": "Change My Password",
+        "description": "No description provided",
+        "parameters": [],
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "title": "Password",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response object",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "List Users",
+        "description": "No description provided",
+        "parameters": [],
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response object",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create User",
+        "description": "No description provided",
+        "parameters": [],
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user_email": {
+                    "title": "User_email",
+                    "type": "string"
+                  },
+                  "password": {
+                    "title": "Password",
+                    "type": "string"
+                  },
+                  "role_names": {
+                    "title": "Role_names",
+                    "type": "array",
+                    "items": {
+                      "title": "Role_names_item",
+                      "type": "string"
+                    }
+                  },
+                  "is_active": {
+                    "title": "Is_active",
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response object",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/users/{user_email}": {
+      "put": {
+        "summary": "Update User",
+        "description": "No description provided",
+        "parameters": [
+          {
+            "name": "user_email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "title": "Password",
+                    "type": "string"
+                  },
+                  "role_names": {
+                    "title": "Role_names",
+                    "type": "array",
+                    "items": {
+                      "title": "Role_names_item",
+                      "type": "string"
+                    }
+                  },
+                  "is_active": {
+                    "title": "Is_active",
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response object",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete User",
+        "description": "No description provided",
+        "parameters": [
+          {
+            "name": "user_email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response object",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/users/{user_email}/change-password": {
+      "put": {
+        "summary": "Change User Password",
+        "description": "No description provided",
+        "parameters": [
+          {
+            "name": "user_email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "title": "Password",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response object",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/users/{user_email}/modify-roles": {
+      "put": {
+        "summary": "Modify User Roles",
+        "description": "No description provided",
+        "parameters": [
+          {
+            "name": "user_email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "role_names": {
+                    "title": "Role_names",
+                    "type": "array",
+                    "items": {
+                      "title": "Role_names_item",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response object",
+                  "type": "object"
                 }
               }
             }
