@@ -1,2 +1,2 @@
-python app.py ${1+"$@"}
-
+#!/usr/bin/env sh
+uv run python app.py "$@"
